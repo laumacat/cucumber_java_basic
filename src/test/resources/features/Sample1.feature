@@ -9,3 +9,11 @@ Feature: Introduction to cucumber part 1
     And I should see menu
 
 
+     # TODO - Add implementation for missing steps
+
+  Scenario: New Simple scenario
+    When I am on the locators page
+    Then I should see both locators page headers
+    And Buttons in Locators page are clickable
+
+
