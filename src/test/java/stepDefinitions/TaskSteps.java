@@ -30,20 +30,32 @@ public class TaskSteps {
         driver.get(base_url);
     }
 
-    @Given("^There are 3 people on the original list$")
-    public void peopleStartList() throws Throwable {
+    @Given("^There are (\\d+) people on the original list$")
+    public void peopleStartList(int listSize) throws Throwable {
+
 
         List<String> origNames = new ArrayList<String>(Arrays.asList("Mike", "Jill", "Jane"));
-        List<String> actual = new ArrayList<String>();
+        List<String> origJobs = new ArrayList<String>(Arrays.asList("Web Designer", "Support", "Accountant"));
 
+        List<String> actualNames = new ArrayList<String>();
         List<WebElement> testNames = driver.findElements(By.className("name"));
         for (WebElement e : testNames) {
-            actual.add(e.getText());
+            actualNames.add(e.getText());
+        }
+        assertEquals(origNames.size(), actualNames.size());
+        assertEquals(origNames, actualNames);
+        assertEquals(listSize, actualNames.size());
+
+
+        List<String> actualJobs = new ArrayList<String>();
+        List<WebElement> testJobs = driver.findElements(By.className("job"));
+        for (WebElement t : testJobs) {
+            actualJobs.add(t.getText());
         }
 
-        assertEquals(origNames.size(), actual.size());
-        assertEquals(origNames, actual);
-
+        assertEquals(origJobs.size(), actualJobs.size());
+        assertEquals(origJobs, actualJobs);
+        assertEquals(listSize, actualJobs.size());
 
     }
 
