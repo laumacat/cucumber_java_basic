@@ -21,3 +21,13 @@ Feature: Introduction to cucumber part 4
     And I click the result checkbox button
     Then message for checkboxes "You selected value(s): Option 2" is seen
 
+
+# TODO - Add implementation for missing steps
+
+  Scenario: Feedback with only languages
+    Given I am on feedback page
+    When I select feedback languages
+      | English |
+      | Spanish |
+    And I click Send
+    Then I can see languages "English,Spanish" in feedback check

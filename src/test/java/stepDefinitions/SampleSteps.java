@@ -1,5 +1,6 @@
 package stepDefinitions;
 
+import cucumber.api.DataTable;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -102,7 +103,6 @@ public class SampleSteps {
     }
 
 
-
     @When("^I am on the locators page$")
     public void iAmOnTheLocatorsPage() throws Throwable {
         driver.get("https://kristinek.github.io/site/examples/locators");
@@ -159,13 +159,13 @@ public class SampleSteps {
     @Then("^I see name \"([^\"]*)\" in correct fields$")
     public void iSeeFeedbackName(String name) throws Throwable {
 
-        assertEquals(name,driver.findElement(By.id("name")).getText());
+        assertEquals(name, driver.findElement(By.id("name")).getText());
     }
 
     @Then("^I see age \"([^\"]*)\" in correct fields$")
     public void iSeeFeedbackAge(String age) throws Throwable {
 
-        assertEquals(age,driver.findElement(By.id("age")).getText());
+        assertEquals(age, driver.findElement(By.id("age")).getText());
     }
 
     //For Task1.feature
@@ -200,7 +200,7 @@ public class SampleSteps {
 
     @Then("^I see message with answer: \"([^\"]*)\"$")
     public void iSeeAnswerMessage(String message) throws Throwable {
-         assertEquals(message, driver.switchTo().alert().getText());
+        assertEquals(message, driver.switchTo().alert().getText());
 
     }
 
@@ -209,6 +209,67 @@ public class SampleSteps {
         driver.switchTo().alert().accept();
 
     }
+
+    //----------------
+
+    @When("^I select feedback languages$")
+    public void iSelectFeedbackLanguage(List<String> languages) throws Throwable {
+        for (String language : languages) {
+            driver.findElement(By.cssSelector("[value='" + language + "']")).click();
+        }
+
+    }
+
+    @Then("^I can see languages \"([^\"]*)\" in feedback check")
+    public void iSeeFeedbackLanguage(String languages) throws Throwable {
+        assertEquals(languages, driver.findElement(By.id("language")).getText());
+
+    }
+
+    //---------
+
+    @When("^I set values:$")
+    public void iSetValues(Map<String, String> valuesForFeedback) throws Throwable {
+
+        driver.findElement(By.id("fb_name")).clear();
+        driver.findElement(By.id("fb_name")).sendKeys(valuesForFeedback.get("name"));
+
+        driver.findElement(By.id("fb_age")).clear();
+        driver.findElement(By.id("fb_age")).sendKeys(valuesForFeedback.get("age"));
+
+        //text is with capital M (Male), but the value is with lower m (male)
+        driver.findElement(By.xpath("//input[@value='" + valuesForFeedback.get("genre") + "']")).click();
+
+//          next line if is optional (in this case), but overall recommended
+//          for validating that this value actually exists before retrieving it
+//
+//            if(valuesForFeedback.containsKey("name")){
+//                iEnterFeedbackName(valuesForFeedback.get("name"));
+//            }
+////          iEnterFeedbackAge(valuesForFeedback.get("age"));
+
+    }
+
+
+    @Then("^I see genre \"([^\"]*)\" in correct fields$")
+    public void iSeeFeedbackGenre(String genre) throws Throwable {
+        assertEquals(genre, driver.findElement(By.id("gender")).getText());
+    }
+
+    // for sample scenario with header table
+    @When("^I set values with headers:$")
+    public void iSetValuesMap(DataTable inputTable) throws Throwable {
+        for (Map<String, String> feedbackInput : inputTable.asMaps(String.class, String.class)) {
+
+            if (feedbackInput.containsKey("name")) {
+                iEnterFeedbackName(feedbackInput.get("name"));
+            }
+            iEnterFeedbackAge(feedbackInput.get("age"));
+            driver.findElement(By.xpath("//input[@value='" + feedbackInput.get("genre") + "']")).click();
+
+        }
+    }
+
 
 
 
